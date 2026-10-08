@@ -1,7 +1,7 @@
 import pygame
 from circleshape import CircleShape
 from shot import Shot
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_SHOOT_SPEED, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_SHOOT_SPEED, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS, SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 
@@ -47,6 +47,8 @@ class Player(CircleShape):
             self.shoot()
         if self.shoot_cooldown_timer > 0:
             self.shoot_cooldown_timer -= dt
+        self.position.x %= SCREEN_WIDTH
+        self.position.y %= SCREEN_HEIGHT
 
     def move(self, dt):
         unit_vector = pygame.Vector2(0, 1)
