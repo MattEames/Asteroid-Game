@@ -13,6 +13,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    lives = 3
     clock = pygame.time.Clock()
     dt = 0.0
 
@@ -39,9 +40,16 @@ def main():
 
         for asteroid in asteroids:
             if asteroid.collides_with(player):
+                lives -= 1
                 log_event("player_hit")
-                print("Game over!")
-                sys.exit()
+
+                if lives <= 0:
+                    print("Game over!")
+                    sys.exit()
+                else:
+                    player.position = pygame.Vector2(SCREEN_WIDTH /2, SCREEN_HEIGHT /2)
+                    player.velocity = pygame.Vector2(0,0)
+                    asteroid.kill()
 
         for asteroid in asteroids:
             for shot in shots:
