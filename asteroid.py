@@ -9,6 +9,9 @@ class Asteroid(CircleShape):
         super().__init__(x, y, radius)
 
     def split(self):
+        for _ in range(5):
+            particle_vel = pygame.Vector2(random.uniform(-100,100), random.uniform(-100,100))
+            Particle(self.position.x, self.position.y,particle_vel)
         self.kill()
         if self.radius <= ASTEROID_MIN_RADIUS:
             return
@@ -32,3 +35,18 @@ class Asteroid(CircleShape):
         self.position += (self.velocity * dt)
         self.position.x %= SCREEN_WIDTH
         self.position.y %= SCREEN_HEIGHT
+
+class Particle(CircleShape):
+    def __init__(self, x, y, velocity):
+        super().__init__(x, y, radius = 2)
+        self.velocity = velocity
+        self.lifespan = 0.5
+
+    def draw(self,screen):
+        pygame.draw.circle(screen, "red", self.position, self.radius)
+
+    def update(self,dt):
+        self.position += self.velocity * dt
+        self.lifespan -= dt
+        if self.lifespan <= 0:
+            self.kill()
