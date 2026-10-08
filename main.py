@@ -30,6 +30,10 @@ def main():
     asteroid_field = AsteroidField()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
+    pygame.font.init()
+    font = pygame.font.SysFont(None,36)
+    score = 0
+
     while True:
         log_state()
         for event in pygame.event.get():
@@ -45,6 +49,7 @@ def main():
 
                 if lives <= 0:
                     print("Game over!")
+                    print(f"Final Score: {score}")
                     sys.exit()
                 else:
                     player.position = pygame.Vector2(SCREEN_WIDTH /2, SCREEN_HEIGHT /2)
@@ -57,11 +62,15 @@ def main():
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split()
+                    score += 100
 
         screen.fill("black")
 
         for obj in drawable:
             obj.draw(screen)
+
+        score_text = font.render(f"Score: {score} | Lives: {lives}", True, "white")
+        screen.blit(score_text, (10,10))
 
         pygame.display.flip()
 
