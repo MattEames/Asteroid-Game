@@ -61,3 +61,23 @@ class Player(CircleShape):
         rotated_vector = unit_vector.rotate(self.rotation)
         rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
         self.position += rotated_with_speed_vector
+
+    def segment_intersects_circle(self, p1, p2, circle_center, radius):
+        line_vec = p2 - p1
+        p1_to_center = circle_center - p1
+        line_length = line_vec.length()
+
+        if line_length == 0:
+            return p1.distance_to(circle_center) <= radius
+
+        projection = p1_to_center.dot(line_vec) / line_length
+        projection = max(0, min(line_length, projection))
+
+        closest_point = p1 + (line_vec.normalize() * projection)
+        return closest_point.distance_to(circle_center) <= radius
+
+    def collides_with_asteroid(self, asteroid):
+        points = self.triangle()
+        return (self.segment_intersects_circle(points[0], points[1], asteroid.position, asteroid.radius) or
+                self.segment_intersects_circle(points[1], points[2], asteroid.position, asteroid.radius) or
+                self.segment_intersects_circle(points[2], points[0], asteroid.position, asteroid.radius))

@@ -18,6 +18,9 @@ def main():
     clock = pygame.time.Clock()
     dt = 0.0
 
+    background = pygame.image.load("space_background").convert()
+    background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -46,7 +49,7 @@ def main():
         updatable.update(dt)
 
         for asteroid in asteroids:
-            if asteroid.collides_with(player):
+            if player.collides_with_asteroid(asteroid):
                 lives -= 1
                 log_event("player_hit")
 
@@ -67,7 +70,7 @@ def main():
                     asteroid.split()
                     score += 100
 
-        screen.fill("black")
+        screen.blit(background, (0,0))
 
         for obj in drawable:
             obj.draw(screen)
